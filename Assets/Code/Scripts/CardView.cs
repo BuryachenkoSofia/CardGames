@@ -13,22 +13,11 @@ public class CardView : MonoBehaviour
 
     private CardData data;
 
-    private void Start()
+    private void Awake()
     {
         image = GetComponent<Image>();
     }
     
-    public void GenerateRandomCard()
-    {
-        CardData card = new CardData
-        {
-            suit = (Suit)Random.Range(0, 4),
-            rank = (Rank)Random.Range(1, 14),
-            faceUp = Random.Range(0, 10) > 1
-        };
-        SetCard(card);
-    }
-
     public void SetCard(CardData card)
     {
         data = card;
