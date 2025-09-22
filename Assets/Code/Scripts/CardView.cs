@@ -11,7 +11,7 @@ public class CardView : MonoBehaviour
     [SerializeField] private Sprite[] heartsSprites;
     [SerializeField] private Sprite[] spadesSprites;
 
-    private CardData data;
+    public CardData data;
 
     private void Awake()
     {

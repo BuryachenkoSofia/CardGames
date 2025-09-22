@@ -22,7 +22,7 @@ public class DeckVisualizer : MonoBehaviour
             GameObject card = Instantiate(cardPrefab, deckParent);
             CardView cardView = card.GetComponent<CardView>();
             cardView.SetCard(cardData);
-            card.GetComponent<RectTransform>().anchoredPosition = new Vector2(deckParent.childCount * 34 - deckParent.gameObject.transform.position.x + 60, 0);
+            card.GetComponent<RectTransform>().anchoredPosition = new Vector2(deckParent.childCount * 34 - deckParent.gameObject.transform.position.x - 70, 0);
         }
     }
 }
