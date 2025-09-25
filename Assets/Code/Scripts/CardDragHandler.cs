@@ -29,6 +29,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         startParent = transform.parent;
         canvasGroup.blocksRaycasts = false;
         transform.SetAsLastSibling();
+        rt.parent.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)

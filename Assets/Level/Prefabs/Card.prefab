@@ -147,6 +147,10 @@ MonoBehaviour:
   - {fileID: 5490350880472310724, guid: dba9a7b21c5afee4f80c89f1454f338a, type: 3}
   - {fileID: 8824583623405348570, guid: fd054ff030ccbe442b40f180be745505, type: 3}
   - {fileID: 6837938241931640281, guid: 060c2c404dd629843bdc83dc7ea1ed49, type: 3}
+  data:
+    suit: 0
+    rank: 0
+    faceUp: 0
 --- !u!225 &3385812658191840355
 CanvasGroup:
   m_ObjectHideFlags: 0
