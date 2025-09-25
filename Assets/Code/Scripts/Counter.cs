@@ -5,7 +5,7 @@ public class Counter : MonoBehaviour
 {
     private int moves = 0, record = 0;
     [SerializeField] private Text text;
-    
+
     private void Awake()
     {
         if (!PlayerPrefs.HasKey("record"))

@@ -33,6 +33,7 @@ public class DropZone : MonoBehaviour, IDropHandler
                 {
                     oldParents.gameObject.AddComponent<DropZone>();
                 }
+
                 if (oldParents.name == "Stock")
                 {
                     rt.gameObject.AddComponent<DropZone>();
@@ -41,6 +42,7 @@ public class DropZone : MonoBehaviour, IDropHandler
             }
         }
     }
+
     private bool CheckCard(GameObject card)
     {
         if (this.tag == "Point") return card.GetComponent<CardView>().data.rank == Rank.King;

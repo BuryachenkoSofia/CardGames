@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DeckVisualizer : MonoBehaviour
@@ -8,14 +7,17 @@ public class DeckVisualizer : MonoBehaviour
     [SerializeField] private Transform deckParent;
     [SerializeField] private Transform[] tableauZones;
     [SerializeField] private Transform remainingDeck;
+
     private void Awake()
     {
         deckManager = GetComponent<DeckManager>();
     }
+
     private void Start()
     {
         ShowDeck();
     }
+
     private void ShowDeck()
     {
         int cardIndex = 0;

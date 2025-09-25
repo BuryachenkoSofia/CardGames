@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class FoundationDropZone : MonoBehaviour, IDropHandler
 {
     public Suit suit;
+
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
@@ -31,12 +32,20 @@ public class FoundationDropZone : MonoBehaviour, IDropHandler
             }
         }
     }
+
     private bool CheckCard(GameObject card)
     {
-        if (card.GetComponent<CardView>().data.suit != suit) return false;
-        if (transform.childCount == 0) return card.GetComponent<CardView>().data.rank == Rank.Ace;
+        if (card.GetComponent<CardView>().data.suit != suit)
+        {
+            return false;
+        }
+        if (transform.childCount == 0)
+        {
+            return card.GetComponent<CardView>().data.rank == Rank.Ace;
+        }
         return (int)card.GetComponent<CardView>().data.rank == (int)transform.GetChild(transform.childCount - 1).GetComponent<CardView>().data.rank + 1;
     }
+
     private bool CheckSuitPile()
     {
         return (transform.childCount == 13);

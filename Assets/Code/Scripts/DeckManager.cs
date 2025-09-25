@@ -1,14 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+
 public class DeckManager : MonoBehaviour
 {
     public List<CardData> deck = new List<CardData>();
+
     private void Awake()
     {
         CreateDeck();
         ShuffleDeck();
     }
+
     private void CreateDeck()
     {
         deck.Clear();
@@ -25,6 +27,7 @@ public class DeckManager : MonoBehaviour
             }
         }
     }
+
     private void ShuffleDeck()
     {
         System.Random rng = new System.Random();

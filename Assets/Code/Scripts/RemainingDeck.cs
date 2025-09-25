@@ -4,11 +4,13 @@ using UnityEngine.EventSystems;
 public class RemainingDeck : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Transform stock;
-    private Transform remainingDeck; 
+    private Transform remainingDeck;
+
     private void Awake()
     {
         remainingDeck = this.transform;
     }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.clickCount == 1)

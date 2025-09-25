@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
@@ -40,7 +39,10 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnEndDrag(PointerEventData eventData)
     {
         canvasGroup.blocksRaycasts = true;
-        if (transform.parent == startParent) rectTransform.anchoredPosition = startPosition;
+        if (transform.parent == startParent)
+        {
+            rectTransform.anchoredPosition = startPosition;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

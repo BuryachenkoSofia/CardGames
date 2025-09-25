@@ -5,19 +5,17 @@ public class CardView : MonoBehaviour
 {
     private Image image;
     [SerializeField] private Sprite backSprite;
-
     [SerializeField] private Sprite[] clubsSprites;
     [SerializeField] private Sprite[] diamondsSprites;
     [SerializeField] private Sprite[] heartsSprites;
     [SerializeField] private Sprite[] spadesSprites;
-
     public CardData data;
 
     private void Awake()
     {
         image = GetComponent<Image>();
     }
-    
+
     public void SetCard(CardData card)
     {
         data = card;
@@ -26,8 +24,14 @@ public class CardView : MonoBehaviour
 
     public void UpdateView()
     {
-        if (data.faceUp) image.sprite = GetSprite(data.suit, data.rank);
-        else image.sprite = backSprite;
+        if (data.faceUp)
+        {
+            image.sprite = GetSprite(data.suit, data.rank);
+        }
+        else
+        {
+            image.sprite = backSprite;
+        }
     }
 
     private Sprite GetSprite(Suit suit, Rank rank)
