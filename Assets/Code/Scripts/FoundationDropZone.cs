@@ -9,36 +9,25 @@ public class FoundationDropZone : MonoBehaviour, IDropHandler
     {
         GameObject dropped = eventData.pointerDrag;
         if (dropped == null) return;
-
-        if (CheckCard(dropped))
+        if (!CheckCard(dropped)) return;
+        FindFirstObjectByType<Counter>().Add();
+        RectTransform rt = dropped.GetComponent<RectTransform>();
+        Transform oldParent = rt.parent;
+        rt.SetParent(this.transform, false);
+        rt.anchoredPosition = Vector2.zero;
+        if (oldParent.childCount > 0 && oldParent.name != "Stock")
         {
-            RectTransform rt = dropped.GetComponent<RectTransform>();
-            Transform oldParent = rt.parent;
+            CardView lastCard = oldParent.GetChild(oldParent.childCount - 1).GetComponent<CardView>();
+            lastCard.data.faceUp = true;
+            lastCard.UpdateView();
 
-            rt.SetParent(this.transform, false);
-            rt.anchoredPosition = Vector2.zero;
-
-            if (oldParent.childCount > 0 && oldParent.name != "Stock")
-            {
-                CardView lastCard = oldParent.GetChild(oldParent.childCount - 1).GetComponent<CardView>();
-                lastCard.data.faceUp = true;
-                lastCard.UpdateView();
-
-                if (!oldParent.GetChild(oldParent.childCount - 1).TryGetComponent<DropZone>(out _))
-                {
-                    oldParent.GetChild(oldParent.childCount - 1).gameObject.AddComponent<DropZone>();
-                }
-            }
-            else
-            {
-                if (!oldParent.TryGetComponent<DropZone>(out _))
-                {
-                    oldParent.gameObject.AddComponent<DropZone>();
-                }
-            }
-            Destroy(dropped.GetComponent<DropZone>());
+            oldParent.GetChild(oldParent.childCount - 1).GetComponent<DropZone>().enabled = true;
         }
-
+        else if (oldParent.name != "Stock")
+        {
+            oldParent.GetComponent<DropZone>().enabled = true;
+        }
+        dropped.GetComponent<DropZone>().enabled = false;
     }
 
     private bool CheckCard(GameObject card)
@@ -54,8 +43,4 @@ public class FoundationDropZone : MonoBehaviour, IDropHandler
         return (int)card.GetComponent<CardView>().data.rank == (int)transform.GetChild(transform.childCount - 1).GetComponent<CardView>().data.rank + 1;
     }
 
-    private bool CheckSuitPile()
-    {
-        return (transform.childCount == 13);
-    }
 }

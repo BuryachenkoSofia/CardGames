@@ -15,6 +15,8 @@ public class RemainingDeck : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.clickCount == 1)
         {
+            if (FindFirstObjectByType<Counter>().win) return;
+            FindFirstObjectByType<Counter>().Add();
             if (remainingDeck.childCount == 0 && stock.childCount > 0)
             {
                 int count = stock.childCount;

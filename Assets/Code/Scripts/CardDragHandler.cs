@@ -71,6 +71,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             RectTransform rt = eventData.pointerDrag.GetComponent<RectTransform>();
             if (rt.parent.name == "RemainingDeck")
             {
+                FindFirstObjectByType<Counter>().Add();
                 rt.GetComponent<CardView>().data.faceUp = true;
                 rt.GetComponent<CardView>().UpdateView();
                 rt.SetParent(GameObject.Find("Stock").transform, false);

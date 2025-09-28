@@ -33,7 +33,7 @@ public class DeckVisualizer : MonoBehaviour
                 RectTransform rt = card.GetComponent<RectTransform>();
                 rt.anchoredPosition = new Vector2(0, -j * 45f);
                 cardIndex++;
-                if (j == i) card.AddComponent<DropZone>();
+                if (j == i) card.GetComponent<DropZone>().enabled = true;
             }
         }
         while (cardIndex < deckManager.deck.Count)

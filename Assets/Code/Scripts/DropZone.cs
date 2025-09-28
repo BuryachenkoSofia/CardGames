@@ -10,57 +10,41 @@ public class DropZone : MonoBehaviour, IDropHandler
         if (dropped == null) return;
         List<RectTransform> stack = GetDraggedStack(dropped);
         if (stack.Count == 0) return;
-
-        if (CheckCard(stack[0].gameObject))
+        if (!CheckCard(stack[0].gameObject)) return;
+        FindFirstObjectByType<Counter>().Add();
+        RectTransform firstCard = stack[0];
+        Transform oldParent = firstCard.parent;
+        Transform newParent;
+        if (this.CompareTag("Point"))
         {
-            RectTransform firstCard = stack[0];
-            Transform oldParent = firstCard.parent;
-            Transform newParent;
-
-            if (this.CompareTag("Point"))
-            {
-                newParent = this.transform;
-            }
-            else
-            {
-                newParent = this.transform.parent;
-            }
-            foreach (var card in stack)
-            {
-                card.SetParent(newParent, false);
-            }
-            ReorderStack(newParent);
-
-            if (oldParent.childCount > 0 && oldParent.name != "Stock" && oldParent.name != "FoundationDropZone")
-            {
-                CardView lastCard = oldParent.GetChild(oldParent.childCount - 1).GetComponent<CardView>();
-                lastCard.data.faceUp = true;
-                lastCard.UpdateView();
-                if (!oldParent.GetChild(oldParent.childCount - 1).TryGetComponent<DropZone>(out _))
-                {
-                    oldParent.GetChild(oldParent.childCount - 1).gameObject.AddComponent<DropZone>();
-                }
-            }
-            else if (oldParent.name == "FoundationDropZone")
-            {
-                dropped.AddComponent<DropZone>();
-            }
-            else
-            {
-                if (!oldParent.TryGetComponent<DropZone>(out _))
-                {
-                    oldParent.gameObject.AddComponent<DropZone>();
-                }
-            }
-            if (oldParent.name == "Stock")
-            {
-                if (!firstCard.TryGetComponent<DropZone>(out _))
-                {
-                    firstCard.gameObject.AddComponent<DropZone>();
-                }
-            }
-            Destroy(GetComponent<DropZone>());
+            newParent = this.transform;
         }
+        else
+        {
+            newParent = this.transform.parent;
+        }
+        foreach (var card in stack)
+        {
+            card.SetParent(newParent, false);
+        }
+        ReorderStack(newParent);
+        if (oldParent.childCount > 0 && oldParent.name != "Stock" && oldParent.name != "FoundationDropZone")
+        {
+            CardView lastCard = oldParent.GetChild(oldParent.childCount - 1).GetComponent<CardView>();
+            lastCard.data.faceUp = true;
+            lastCard.UpdateView();
+            oldParent.GetChild(oldParent.childCount - 1).GetComponent<DropZone>().enabled = true;
+
+        }
+        else if (oldParent.name == "FoundationDropZone" || oldParent.name == "Stock")
+        {
+            firstCard.GetComponent<DropZone>().enabled = true;
+        }
+        else
+        {
+            oldParent.GetComponent<DropZone>().enabled = true;
+        }
+        this.GetComponent<DropZone>().enabled = false;
     }
 
     private void ReorderStack(Transform parent)
