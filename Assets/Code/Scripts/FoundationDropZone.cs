@@ -8,29 +8,37 @@ public class FoundationDropZone : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData)
     {
         GameObject dropped = eventData.pointerDrag;
-        if (dropped != null)
+        if (dropped == null) return;
+
+        if (CheckCard(dropped))
         {
-            if (CheckCard(dropped))
+            RectTransform rt = dropped.GetComponent<RectTransform>();
+            Transform oldParent = rt.parent;
+
+            rt.SetParent(this.transform, false);
+            rt.anchoredPosition = Vector2.zero;
+
+            if (oldParent.childCount > 0 && oldParent.name != "Stock")
             {
-                RectTransform rt = dropped.GetComponent<RectTransform>();
-                Transform oldParents = rt.parent;
+                CardView lastCard = oldParent.GetChild(oldParent.childCount - 1).GetComponent<CardView>();
+                lastCard.data.faceUp = true;
+                lastCard.UpdateView();
 
-                rt.SetParent(this.transform, false);
-                rt.anchoredPosition = Vector2.zero;
-
-                if (oldParents.childCount != 0 && oldParents.name != "Stock")
+                if (!oldParent.GetChild(oldParent.childCount - 1).TryGetComponent<DropZone>(out _))
                 {
-                    oldParents.GetChild(oldParents.childCount - 1).GetComponent<CardView>().data.faceUp = true;
-                    oldParents.GetChild(oldParents.childCount - 1).GetComponent<CardView>().UpdateView();
-                    oldParents.GetChild(oldParents.childCount - 1).gameObject.AddComponent<DropZone>();
+                    oldParent.GetChild(oldParent.childCount - 1).gameObject.AddComponent<DropZone>();
                 }
-                else
-                {
-                    oldParents.gameObject.AddComponent<DropZone>();
-                }
-                Destroy(dropped.GetComponent<DropZone>());
             }
+            else
+            {
+                if (!oldParent.TryGetComponent<DropZone>(out _))
+                {
+                    oldParent.gameObject.AddComponent<DropZone>();
+                }
+            }
+            Destroy(dropped.GetComponent<DropZone>());
         }
+
     }
 
     private bool CheckCard(GameObject card)

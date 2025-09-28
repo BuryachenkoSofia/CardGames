@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
 {
@@ -8,6 +9,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private CanvasGroup canvasGroup;
     private Vector3 startPosition;
     private Transform startParent;
+    private List<RectTransform> draggedStack = new List<RectTransform>();
 
     private void Awake()
     {
@@ -19,7 +21,7 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void OnBeginDrag(PointerEventData eventData)
     {
         RectTransform rt = eventData.pointerDrag.GetComponent<RectTransform>();
-        if (rt.parent.GetChild(rt.parent.childCount - 1) != rt || rt.parent.name == "RemainingDeck")
+        if (!rt.GetComponent<CardView>().data.faceUp || rt.parent.name == "RemainingDeck")
         {
             eventData.pointerDrag = null;
             return;
@@ -27,13 +29,26 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         startPosition = rectTransform.anchoredPosition;
         startParent = transform.parent;
         canvasGroup.blocksRaycasts = false;
-        transform.SetAsLastSibling();
+        draggedStack.Clear();
+        int index = transform.GetSiblingIndex();
+        for (int i = index; i < transform.parent.childCount; i++)
+        {
+            draggedStack.Add(transform.parent.GetChild(i).GetComponent<RectTransform>());
+        }
+        foreach (var card in draggedStack)
+        {
+            card.SetAsLastSibling();
+        }
         rt.parent.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        Vector2 delta = eventData.delta / canvas.scaleFactor;
+        for (int i = 0; i < draggedStack.Count; i++)
+        {
+            draggedStack[i].anchoredPosition += delta;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -41,8 +56,12 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         canvasGroup.blocksRaycasts = true;
         if (transform.parent == startParent)
         {
-            rectTransform.anchoredPosition = startPosition;
+            for (int i = 0; i < draggedStack.Count; i++)
+            {
+                draggedStack[i].anchoredPosition = startPosition + new Vector3(0, -45f * i, 0);
+            }
         }
+        draggedStack.Clear();
     }
 
     public void OnPointerClick(PointerEventData eventData)
