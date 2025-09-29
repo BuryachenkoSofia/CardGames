@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Counter : MonoBehaviour
 {
     private int moves = 0, record = 0;
-    [SerializeField] private Text text;
+    [SerializeField] private Text text, recordText;
     [SerializeField] private List<GameObject> foundationDropZones = new List<GameObject>();
     public bool win = false;
 
@@ -51,6 +51,10 @@ public class Counter : MonoBehaviour
     private void UpdateText()
     {
         text.text = moves + "\n";
+        if (record != 0)
+        {
+            recordText.text = "Record: " + record;
+        }
     }
 
     private bool Check()
